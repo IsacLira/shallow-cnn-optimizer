@@ -1,0 +1,31 @@
+To enforce constraints for Pyramidal CNN models, you could add the following constraints to the search space:
+
+    Pyramid scheme: The number of filters should increase while the spatial resolution decreases in each stage of the pyramid. To enforce this, you could add a constraint that the number of filters in the second stage should be greater than the number of filters in the first stage, and the number of filters in the third stage should be greater than the number of filters in the second stage.
+
+    Down-sampling rate: The pooling size should be larger in the first stage of the pyramid than in the second stage, and larger in the second stage than in the third stage. To enforce this, you could add a constraint that the pool size in the first stage should be greater than the pool size in the second stage, and the pool size in the second stage should be greater than the pool size in the third stage.
+
+    Filter size: The filter size should be odd to maintain spatial resolution, and the filter size in each stage of the pyramid should not exceed the spatial resolution of the previous stage. To enforce this, you could add a constraint that the filter size in each stage should be odd, and the filter size in the second stage should not exceed the pool size in the first stage, and the filter size in the third stage should not exceed the pool size in the second stage.
+
+The modified search space with constraints for Pyramidal CNN models would look like this:
+
+search_space = [
+{"name": "num_filters1", "type": "range", "bounds": [16, 64]},
+{"name": "filter_size1", "type": "choice", "values": [3, 5]},
+{"name": "pool_size1", "type": "choice", "values": [2, 3]},
+{"name": "num_filters2", "type": "range", "bounds": [16, 64]},
+{"name": "filter_size2", "type": "choice", "values": [3, 5]},
+{"name": "pool_size2", "type": "choice", "values": [2, 3]},
+{"name": "num_filters3", "type": "range", "bounds": [16, 64]},
+{"name": "filter_size3", "type": "choice", "values": [3, 5]},
+{"name": "pool_size3", "type": "choice", "values": [2, 3]},
+{"name": "constraint1", "type": "fixed", "value": 1},
+{"name": "constraint2", "type": "fixed", "value": 1},
+{"name": "constraint3", "type": "fixed", "value": 1}
+]
+
+where the constraints are defined as follows:
+
+    constraint1: num_filters2 > num_filters1 and num_filters3 > num_filters2
+    constraint2: pool_size1 > pool_size2 and pool_size2 > pool_size3
+    constraint3: filter_size1 % 2 == 1 and filter_size2 % 2 == 1 and filter_size3 % 2 == 1 and filter_size2 <= pool_size1 and filter_size3 <= pool_size2
+
