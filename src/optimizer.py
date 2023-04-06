@@ -8,13 +8,6 @@ import torch.nn as nn
 import logging
 
 
-
-#     _, predicted = torch.max(outputs.data, 1)
-#     total += labels.size(0)
-#     correct += (predicted == labels).sum().item()
-# accuracy = correct / total  
-# print(f"ACC for epoch {epoch}: ", accuracy)
-
 class CNNTrainer:
     def __init__(self, train_data, val_data=None, batch_size=64, model=None, patience=5):
         self.patience = patience
